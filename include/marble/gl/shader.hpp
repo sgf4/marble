@@ -19,6 +19,8 @@ limitations under the License. */
 #include <unordered_map>
 #include <unordered_set>
 
+namespace ME {
+
 namespace GL {
 
 class Shader {
@@ -53,3 +55,4 @@ public:
 
 }
 
+}

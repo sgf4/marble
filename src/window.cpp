@@ -16,6 +16,8 @@ limitations under the License. */
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
+using namespace ME;
+
 static const char* mainFboVert = R"(
 #version 330 core
 layout (location = 0) in vec2 apos;

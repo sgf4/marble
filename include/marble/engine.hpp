@@ -17,6 +17,8 @@ limitations under the License. */
 #include <functional>
 #include <memory>
 
+namespace ME {
+
 class Window;
 class World;
 
@@ -25,7 +27,7 @@ namespace GL {
 }
 
 class Engine;
-extern Engine* engine;
+inline Engine* engine;
 
 class Engine {
     struct AssignPtr { AssignPtr(Engine* e) { engine = e; } } assignPtr { this };
@@ -52,3 +54,5 @@ public:
     void forEachShader(const std::function<void(GL::Shader&)>&);
     u64 getNewId();
 };
+
+}

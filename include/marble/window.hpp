@@ -19,12 +19,14 @@ limitations under the License. */
 #include "engine.hpp"
 #include <glm/vec2.hpp>
 
-#define WINDOW engine->getWindow()
+#define WINDOW ME::engine->getWindow()
 #define WINDOW_RX WINDOW.getResolution().x
 #define WINDOW_RY WINDOW.getResolution().y
 
 struct GLFWwindow;
 extern "C" int glfwWindowShouldClose(GLFWwindow*);
+
+namespace ME {
 
 class Window;
 
@@ -94,3 +96,5 @@ public:
     bool getKeyReleased(Key key);
     glm::vec2 getMouseDir();
 };
+
+}

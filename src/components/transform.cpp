@@ -17,6 +17,8 @@ limitations under the License. */
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace ME;
+
 static float clampRotation(float& f) {
     f -= 360 * (int)(f/180);
     return f;

@@ -20,6 +20,7 @@ limitations under the License. */
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
 
+using namespace ME;
 
 void Camera::init() {
     getEntity().addComponent<Transform>();
@@ -68,4 +69,3 @@ void Camera::update() {
     glUseProgram(0);
 
 }
-

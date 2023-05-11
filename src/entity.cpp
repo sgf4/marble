@@ -15,6 +15,7 @@ limitations under the License. */
 #include <marble/entity.hpp>
 #include <algorithm>
 
+using namespace ME;
 
 void Entity::updateId(u32 i) {
     id = i;

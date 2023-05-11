@@ -15,6 +15,8 @@ limitations under the License. */
 #pragma once
 #include "integers.hpp"
 
+namespace ME {
+
 enum Key : u16 {
     KEY_SPACE = 32,
     KEY_APOSTROPHE = 39, /* ' */
@@ -140,3 +142,5 @@ enum Key : u16 {
     KEY_MOUSE_LEFT = 349,
     KEY_LAST = KEY_MENU
 };
+
+}

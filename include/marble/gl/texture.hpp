@@ -15,6 +15,8 @@ limitations under the License. */
 #pragma once
 #include <marble/integers.hpp>
 
+namespace ME {
+
 namespace GL {
 
 struct Texture {
@@ -30,3 +32,5 @@ struct Texture {
 };
 
 };
+
+}

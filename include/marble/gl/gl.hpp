@@ -21,6 +21,8 @@ limitations under the License. */
 // void gl_task_queue_runtasks(void);
 // void gl_task_queue_execute(void (*fn) (void*), void* arg);
 
+namespace ME {
+
 namespace GL {
 
 struct ID {
@@ -107,5 +109,7 @@ public:
 };
 
 inline Instance* instance;
+
+}
 
 }

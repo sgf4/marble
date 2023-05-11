@@ -20,6 +20,8 @@ limitations under the License. */
 #include <vector>
 #include <bitset>
 
+namespace ME {
+
 class Entity;
 struct Component {
     u32 id;
@@ -156,5 +158,7 @@ public:
     }
 
 };
+
+}
 
 #include "entity.hpp"

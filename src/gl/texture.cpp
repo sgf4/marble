@@ -16,7 +16,7 @@ limitations under the License. */
 #include <HLib/stb_image.hpp>
 #include <marble/gl/gl.hpp>
 
-using namespace GL;
+using namespace ME::GL;
 
 Texture::Texture() {
     glGenTextures(1, &id);

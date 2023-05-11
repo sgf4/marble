@@ -20,6 +20,8 @@ limitations under the License. */
 
 #include "transform.hpp"
 
+namespace ME {
+
 class Camera : public Component {
 public:
     bool control { false };
@@ -33,3 +35,5 @@ public:
     //void updateUniforms(GL::Shader&);
     Camera& setControl(bool v) { control = v; return *this; }
 };
+
+}

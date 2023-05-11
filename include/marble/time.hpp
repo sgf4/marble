@@ -16,6 +16,8 @@ limitations under the License. */
 #include <chrono>
 #include "integers.hpp"
 
+namespace ME {
+
 class Time {
     std::chrono::time_point<std::chrono::steady_clock> m_start;
 
@@ -47,3 +49,5 @@ public:
         m_frameCount++;
     }
 };
+
+}

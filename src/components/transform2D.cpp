@@ -17,6 +17,7 @@ limitations under the License. */
 #include <glm/gtx/matrix_transform_2d.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+using namespace ME;
 
 Transform2D::Transform2D(glm::vec2 position, glm::vec2 scale, float rotation)
 : position(position),

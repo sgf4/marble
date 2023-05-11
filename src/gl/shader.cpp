@@ -15,9 +15,9 @@ limitations under the License. */
 #include <marble/gl/shader.hpp>
 #include <marble/gl/gl.hpp>
 
-using namespace GL;
+using namespace ME::GL;
 
-std::unordered_set<GL::Shader*> Shader::shaders;
+std::unordered_set<Shader*> Shader::shaders;
 
 Shader::Shader() {}
 Shader::Shader(const char* vsource, const char* fsource) {

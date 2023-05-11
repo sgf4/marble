@@ -19,7 +19,7 @@ limitations under the License. */
 #include <memory>
 #include <unordered_set>
 
-Engine* engine;
+using namespace ME;
 
 class Engine::EngineImpl {
     friend Engine;

@@ -15,8 +15,10 @@ limitations under the License. */
 #include <marble/component.hpp>
 #include <typeindex>
 
+using namespace ME;
+
 ComponentManager::ComponentManager() {
-    
+
 }
 
 void ComponentManager::update() {

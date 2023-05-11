@@ -20,6 +20,8 @@ limitations under the License. */
 #include <marble/components/transform2d.hpp>
 #include <marble/window.hpp>
 
+using namespace ME;
+
 World::World() {
     componentManager = std::make_unique<ComponentManager>();
     entities.reserve(100);

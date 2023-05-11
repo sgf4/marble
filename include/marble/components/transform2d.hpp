@@ -18,6 +18,8 @@ limitations under the License. */
 #include <glm/vec2.hpp>
 #include <glm/mat3x3.hpp>
 
+namespace ME {
+
 class Transform2D : public Component {
 public:
     Transform2D(glm::vec2 position = {0, 0}, glm::vec2 scale = {1, 1}, float rotation = 0);
@@ -30,3 +32,5 @@ public:
     void update(GL::Shader& s);
     void updateUniforms(GL::Shader& s);
 };
+
+}

@@ -21,6 +21,8 @@ limitations under the License. */
 
 #define ENTITY getEntity()
 
+namespace ME {
+
 class Entity {
     using ComponentKeys = std::array<Component::Key, 8>;
     ComponentKeys componentKeys;
@@ -93,4 +95,6 @@ T& Component::getComponent() {
 template<typename T>
 void Component::delComponent() {
     getEntity().delComponent<T>();
+}
+
 }

@@ -18,6 +18,8 @@ limitations under the License. */
 
 #define TRANSFORM ENTITY.getComponent<Transform>()
 
+namespace ME {
+
 class Transform : public Component {
 public:
     glm::mat4 model { 1.f };
@@ -32,3 +34,5 @@ public:
     Transform& setRotation(glm::vec3 r) { rotation = r; modelNeedsUpdate = true; return *this; }
     Transform& addRotation(glm::vec3 r) { rotation += r; modelNeedsUpdate = true; return *this; }
 };
+
+}

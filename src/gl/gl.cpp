@@ -16,7 +16,7 @@ limitations under the License. */
 #include <marble/gl/gl.hpp>
 #include <pthread.h>
 
-using namespace GL;
+using namespace ME::GL;
 
 static const float square_vertices[] = {
     -0.5, -0.5,

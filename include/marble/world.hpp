@@ -26,6 +26,8 @@ limitations under the License. */
 #define WTIME WORLD.time
 #define CM WORLD.getComponentManager()
 
+namespace ME {
+
 class Entity;
 class ComponentManager;
 
@@ -55,4 +57,6 @@ public:
     void updateWorld();
     void updateUniforms(GL::Shader& s);
     ComponentManager& getComponentManager() { return *componentManager; }
+};
+
 };

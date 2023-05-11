@@ -248,6 +248,7 @@ bool Window::getKeyReleased(Key key) {
 }
 
 void Window::onMouseEvent(glm::vec2 pos) {
+    pos.y *= -1;
     mouseDirection = pos-mousePosition;
     mousePosition = pos;
 }

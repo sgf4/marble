@@ -35,7 +35,7 @@ public:
 
     void update() {
         float elapsedSeconds = std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::steady_clock::now()-m_start).count();
-        delta = elapsed-elapsedSeconds;
+        delta = elapsedSeconds-elapsed;
         elapsed = elapsedSeconds;
 
         if (elapsedSeconds >= m_nextSecond) {

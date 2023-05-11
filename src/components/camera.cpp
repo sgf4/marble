@@ -34,7 +34,7 @@ void Camera::update() {
     direction.y = std::sin(glm::radians(pitch));
     direction.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
     direction = glm::normalize(direction);
-    t.model = glm::lookAt(t.position, t.position - direction, up);
+    t.model = glm::lookAt(t.position, t.position+direction, up);
 
     // set projection
     proj = glm::perspective(glm::radians(fov), (float)WINDOW.getResolutionRatio(), 0.01f, 10000.0f);
@@ -47,8 +47,8 @@ void Camera::update() {
     pitch += dir.y;
 
     glm::vec3 mov = {
-        std::cos(glm::radians(yaw))*WTIME.delta*2.0, 
-        0.0, 
+        std::cos(glm::radians(yaw))*WTIME.delta*2.0,
+        0.0,
         std::sin(glm::radians(yaw))*WTIME.delta*2.0
     };
 

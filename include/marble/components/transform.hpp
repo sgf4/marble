@@ -30,4 +30,5 @@ public:
     Transform& setPosition(glm::vec3 p) { position = p; modelNeedsUpdate = true; return *this; }
     Transform& setScale(glm::vec3 s) { scale = s; modelNeedsUpdate = true; return *this; }
     Transform& setRotation(glm::vec3 r) { rotation = r; modelNeedsUpdate = true; return *this; }
+    Transform& addRotation(glm::vec3 r) { rotation += r; modelNeedsUpdate = true; return *this; }
 };

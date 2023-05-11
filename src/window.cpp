@@ -63,7 +63,15 @@ GLFWInstance::~GLFWInstance() {
     glfwTerminate();
 }
 
-Window::Window() : fboShader(mainFboVert, mainFboFrag) {
+Window::Window() :
+   resolution {640, 480},
+   offset(),
+   size(640, 480),
+   title("omg"),
+   vsync(false),
+   fullscreen(false),
+   cursorIshiden(false),
+   fboShader(mainFboVert, mainFboFrag) {
 
     glfwSetWindowUserPointer(glfwInstance, (void*) this);
 
@@ -95,7 +103,7 @@ Window::Window() : fboShader(mainFboVert, mainFboFrag) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Default
-    glfwSwapInterval(1);
+    glfwSwapInterval(vsync);
 
     // Input
     glfwSetKeyCallback(glfwInstance, [] (GLFWwindow *window, int key, int scancode, int action, int mods) {

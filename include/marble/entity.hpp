@@ -46,6 +46,7 @@ public:
     }
 
     void delComponent(u32 type);
+    void delComponent(Component::Key& type);
 
     template<typename T>
     bool hasComponent() {

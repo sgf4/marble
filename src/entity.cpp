@@ -34,11 +34,15 @@ Component& Entity::addComponent(u32 type) {
 
 void Entity::delComponent(u32 type) {
     Component::Key& key = getComponentKey(type);
+    delComponent(key);
+}
+
+void Entity::delComponent(Component::Key& key) {
     Component& c = CM.get(key);
     c.destroy();
     CM.del(key);
 
-    if (CM.count(type) != key.id) c.getEntity().getComponentKey(type).id = key.id;
+    if (CM.count(key.type) != key.id) c.getEntity().getComponentKey(key.type).id = key.id;
     key = componentKeys[--nComponents];
 }
 
@@ -59,9 +63,9 @@ Entity::ComponentKeys::iterator Entity::getComponentKeyIt(u32 type) {
 }
 
 void Entity::destroy() {
-    std::for_each_n(componentKeys.begin(), nComponents, [&] (Component::Key& k) {
-        delComponent(k.type);
-    });
+    for (u32 i=0; i<nComponents; i++) {
+        delComponent(componentKeys[0].type);
+    }
 }
 
 std::shared_ptr<u32> Entity::getRef() {

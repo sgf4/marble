@@ -40,10 +40,10 @@ struct GLFWInstance {
 };
 
 class Window {
-    glm::uvec2 resolution {640, 480}, offset, size {640, 480};
+    glm::uvec2 resolution, offset, size;
 
-    const char* title {"omg"};
-    bool vsync {true}, fullscreen {false}, cursorIshiden {false};
+    const char* title;
+    bool vsync, fullscreen, cursorIshiden;
 
     glm::vec2 mouseDirection {}, mousePosition {};
 

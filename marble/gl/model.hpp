@@ -11,3 +11,34 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
+
+#pragma once
+#include <marble/gl/gl.hpp>
+#include <vector>
+
+namespace ME {
+
+namespace GL {
+
+class Model {
+    struct Mesh {
+		GL::VAO vao;
+        GL::VBO vbo;
+		//std::vector<u32> vert_indices;
+		u32 tex_handle;
+	};
+
+public:
+	std::vector<Mesh> meshes;
+	std::vector<Texture> textures;
+
+    Model(const char* fdata, u32 size);
+    void draw();
+
+    static void compileShader();
+    static GL::Shader shader;
+};
+
+};
+
+};

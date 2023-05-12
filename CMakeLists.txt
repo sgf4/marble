@@ -26,7 +26,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
 
-file(GLOB_RECURSE MARBLE_SOURCES src/*.cpp src/*.hpp)
+file(GLOB_RECURSE MARBLE_SOURCES marble/*.cpp marble/*.hpp)
 
 add_library(marble STATIC ${MARBLE_SOURCES})
 
@@ -45,11 +45,10 @@ find_package(assimp REQUIRED)
 include_directories(${ASSIMP_INCLUDE_DIRS})
 target_link_libraries(marble PUBLIC ${ASSIMP_LIBRARIES})
 
-target_include_directories(marble PUBLIC include)
-target_include_directories(marble PRIVATE src)
+target_include_directories(marble PUBLIC ${PROJECT_SOURCE_DIR})
 
 if (USE_PCH)
   target_precompile_headers(marble PUBLIC
-    src/stdafx.hpp
+    marble/stdafx.hpp
   )
 endif()

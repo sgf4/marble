@@ -70,7 +70,7 @@ Window::Window() :
    offset(),
    size(640, 480),
    title("omg"),
-   vsync(false),
+   vsync(true),
    fullscreen(false),
    cursorIshiden(false),
    fboShader(mainFboVert, mainFboFrag) {

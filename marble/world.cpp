@@ -18,6 +18,7 @@ limitations under the License. */
 #include <marble/components/camera.hpp>
 #include <marble/components/shader.hpp>
 #include <marble/components/transform2d.hpp>
+#include <marble/components/model.hpp>
 #include <marble/window.hpp>
 
 using namespace ME;
@@ -34,6 +35,7 @@ World::World() {
     CM.load<Shader>();
     CM.load<Transform2D>();
     CM.load<Camera>();
+    CM.load<Model>();
     //CM.load<Gui>();
 
     camera = addEntity().getRef();
@@ -67,6 +69,11 @@ void World::delEntity(u32 id) {
     entities.pop_back();
 
     if (id != entities.size()) e.updateId(id);
+}
+
+
+void World::delEntity(Entity& e) {
+    delEntity(e.id);
 }
 
 void World::updateUniforms(GL::Shader& s) {

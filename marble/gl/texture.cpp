@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #include <marble/gl/texture.hpp>
-#include <HLib/stb_image.hpp>
+#include <marble/HLib/stb_image.hpp>
 #include <marble/gl/gl.hpp>
 
 using namespace ME::GL;

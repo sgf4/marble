@@ -21,6 +21,10 @@ std::unordered_set<Shader*> Shader::shaders;
 
 Shader::Shader() {}
 Shader::Shader(const char* vsource, const char* fsource) {
+    compile(vsource, fsource);
+}
+
+void Shader::compile(const char* vsource, const char* fsource) {
     program = glCreateProgram();
     u32 vs = glCreateShader(GL_VERTEX_SHADER);
     u32 fs = glCreateShader(GL_FRAGMENT_SHADER);

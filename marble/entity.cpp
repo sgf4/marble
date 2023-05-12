@@ -26,6 +26,8 @@ void Entity::updateId(u32 i) {
 }
 
 Component& Entity::addComponent(u32 type) {
+    try { return getComponent(type); }
+    catch (...) {}
     Component& c = CM.add(type);
     c.eId = id;
     componentKeys[nComponents++] = {type, c.id};
@@ -47,9 +49,18 @@ void Entity::delComponent(Component::Key& key) {
     key = componentKeys[--nComponents];
 }
 
+bool Entity::hasComponent(u32 type) {
+    auto it = getComponentKeyIt(type);
+    return it != componentKeys.begin()+nComponents;
+}
+
+Component& Entity::getComponent(u32 type) {
+    return CM.get(getComponentKey(type));
+}
+
 Component::Key& Entity::getComponentKey(u32 type) {
     auto it = getComponentKeyIt(type);
-    if (it == componentKeys.end()) throw std::string("Component with key ") + std::to_string(type) + " not found";
+    if (it == componentKeys.begin()+nComponents) throw std::string("Component with key ") + std::to_string(type) + " not found";
     return *it;
 }
 
@@ -65,7 +76,7 @@ Entity::ComponentKeys::iterator Entity::getComponentKeyIt(u32 type) {
 
 void Entity::destroy() {
     for (u32 i=0; i<nComponents; i++) {
-        delComponent(componentKeys[0].type);
+        delComponent(componentKeys[0]);
     }
 }
 

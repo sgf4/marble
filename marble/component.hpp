@@ -36,6 +36,10 @@ struct Component {
         return WORLD.getEntity(eId);
     }
 
+    operator Entity&() {
+        return getEntity();
+    }
+
     template<typename T>
     T& addComponent();
 
@@ -146,6 +150,16 @@ public:
 
     void del(Component::Key& key) {
         systems.at(key.type)->del(key.id);
+    }
+
+    template<typename T>
+    void del(u32 id) {
+        systems.at(getTypeId<T>())->del(id);
+    }
+
+    template<typename T>
+    Component& get(u32 id) {
+        return systems.at(getTypeId<T>())->get(id);
     }
 
     Component& get(Component::Key& key) {

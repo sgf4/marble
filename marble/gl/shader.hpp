@@ -35,6 +35,8 @@ public:
     Shader(const char* vsource, const char* fsource);
     ~Shader();
 
+    void compile(const char* vsource, const char* fsource);
+
     u32 getAttrib(const char* name) {
         return attributes.at(name);
     }

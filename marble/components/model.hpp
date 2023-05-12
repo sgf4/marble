@@ -13,3 +13,22 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
+#include <marble/gl/gl.hpp>
+#include <marble/component.hpp>
+
+namespace ME {
+
+class Model : public Component {
+
+public:
+    void init();
+};
+
+template<>
+struct ComponentSystem<Model> : public BasicComponentSystem<Model> {
+    GL::Shader shader;
+
+    ComponentSystem();
+};
+
+};

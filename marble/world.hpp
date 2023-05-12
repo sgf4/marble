@@ -48,6 +48,7 @@ public:
     Entity& addEntity();
     u32 getEntityCount();
     Entity& getEntity(u32 id);
+    void delEntity(Entity& e);
     void delEntity(u32 id);
     Entity& getCamera() { return getEntity(*camera); }
 

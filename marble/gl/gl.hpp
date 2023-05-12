@@ -15,8 +15,6 @@ limitations under the License. */
 #pragma once
 #include "../integers.hpp"
 #include "glad.hpp"
-#include "shader.hpp"
-#include "texture.hpp"
 
 // void gl_task_queue_runtasks(void);
 // void gl_task_queue_execute(void (*fn) (void*), void* arg);
@@ -94,14 +92,14 @@ class Instance {
         ~I() {
             gladLoaderUnloadGL();
         }
-    } m_loader;
-    VAO m_squareVAO;
-    VBO m_squareVBO;
+    } loader;
+    VAO squareVAO;
+    VBO squareVBO;
 
 public:
 
     u32 getSquareVAO() const {
-        return m_squareVAO;
+        return squareVAO;
     }
 
     Instance();
@@ -113,3 +111,7 @@ inline Instance* instance;
 }
 
 }
+
+#include "shader.hpp"
+#include "texture.hpp"
+#include "model.hpp"

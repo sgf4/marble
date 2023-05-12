@@ -52,13 +52,21 @@ public:
 
     template<typename T>
     bool hasComponent() {
-        auto it = getComponentKeyIt(CM.getTypeId<T>());
-        return it != componentKeys.end();
+        return hasComponent(CM.getTypeId<T>());
     }
+
+    bool hasComponent(u32 type);
 
     template<typename T>
     T& getComponent() {
-        return static_cast<T&>(CM.get(getComponentKey<T>()));
+        return static_cast<T&>(getComponent(CM.getTypeId<T>()));
+    }
+
+    Component& getComponent(u32 type);
+
+    template<typename... Ts>
+    auto getComponents() {
+        return std::tie(getComponent<Ts>()...);
     }
 
     template<typename T>
@@ -84,7 +92,7 @@ public:
 // Shortcuts for Component
 template<typename T>
 T& Component::addComponent() {
-    getEntity().addComponent<T>();
+    return getEntity().addComponent<T>();
 }
 
 template<typename T>

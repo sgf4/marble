@@ -13,15 +13,19 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
-#include <marble/gl/gl.hpp>
-#include <marble/component.hpp>
+#include "../gl/gl.hpp"
+#include "../component.hpp"
 
 namespace ME {
 
-class Model : public Component {
 
+
+class Model : public Component {
+    GL::Model* model {};
 public:
     void init();
+    void update();
+    void setModel(GL::Model& m) { model = &m; }
 };
 
 template<>

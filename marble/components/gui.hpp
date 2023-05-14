@@ -13,8 +13,10 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
-#include "Component.hpp"
-#include <GL.hpp>
+#include "../component.hpp"
+#include "../gl/gl.hpp"
+
+namespace ME {
 
 class Gui : public Component {
 public:
@@ -35,3 +37,5 @@ public:
     void init();
     void update();
 };
+
+}

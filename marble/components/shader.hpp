@@ -13,33 +13,26 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
-#include <marble/component.hpp>
-#include <marble/gl/gl.hpp>
+#include "../component.hpp"
+#include "../gl/gl.hpp"
 
 namespace ME {
 
 class Shader : public Component {
-
+    GL::Shader* shader {};
 public:
-    GL::Shader* m_shader {};
-public:
-    void setShader(GL::Shader& s) { m_shader = &s; }
-    GL::Shader& getShader() { return *m_shader; }
-
-    void use() {
-        glUseProgram(*m_shader);
+    void setShader(GL::Shader& s) { shader = &s; }
+    GL::Shader& getShader() { return *shader; }
+    operator GL::Shader& () {
+        return *shader;
     }
 
-    auto getAttrib(const char* a) {
-        return m_shader->getAttrib(a);
+    GL::Shader* operator->() {
+        return shader;
     }
 
-    auto getUniform(const char* u) {
-        return m_shader->getUniform(u);
-    }
-
-    void unuse() {
-        glUseProgram(0);
+    GL::Shader& operator*() {
+        return *shader;
     }
 };
 

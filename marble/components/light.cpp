@@ -12,29 +12,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#pragma once
-#include <glm/mat4x4.hpp>
-#include <glm/vec3.hpp>
-#include <unordered_map>
-
-#include "../component.hpp"
+#include "light.hpp"
 #include "transform.hpp"
+#include "../gl/gl.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
-namespace ME {
+using namespace ME;
 
-class Camera : public Component {
-    void updateControl();
-public:
-    bool control { false };
-    glm::vec3 direction;
-    glm::vec3 up {0, 1, 0};
-    glm::mat4 proj;
-    float fov {75.f}, yaw {0.f}, pitch {0.f}, sensibility {0.1f};
+void Light::init() {
+    addComponent<Transform>().setPosition(10.0, 0.0, -10.0);
+}
 
-    void init();
-    void update();
-    //void updateUniforms(GL::Shader&);
-    Camera& setControl(bool v) { control = v; return *this; }
-};
-
+void Light::update() {
+    Transform& t = getComponent<Transform>();
+    // Update uniforms
+    for (GL::Shader* s : GL::Shader::shaders) {
+        glUseProgram(*s);
+        try { glUniform3fv(s->getUniform("uLightPos"), 1, glm::value_ptr(t.position)); } catch(...) {}
+        try { glUniform3fv(s->getUniform("uLightColor"), 1, glm::value_ptr(color)); } catch(...) {}
+    }
 }

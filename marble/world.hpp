@@ -34,7 +34,7 @@ class ComponentManager;
 class World {
     std::unique_ptr<ComponentManager> componentManager;
     std::vector<Entity> entities;
-    std::shared_ptr<u32> camera;
+    std::shared_ptr<Entity*> camera;
 public:
 
     u64 id;
@@ -50,7 +50,7 @@ public:
     Entity& getEntity(u32 id);
     void delEntity(Entity& e);
     void delEntity(u32 id);
-    Entity& getCamera() { return getEntity(*camera); }
+    Entity& getCamera() { return **camera; }
 
     virtual void init() {}
     virtual void update() {}

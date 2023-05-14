@@ -12,16 +12,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/components/transform.hpp>
+#include "transform.hpp"
+#include "shader.hpp"
 
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <stdexcept>
 
 using namespace ME;
 
 static float clampRotation(float& f) {
     f -= 360 * (int)(f/180);
     return f;
+}
+
+Transform& Transform::operator=(const Transform& other) {
+    model = other.model;
+    position = other.position;
+    scale = other.scale;
+    rotation = other.rotation;
+    return *this;
 }
 
 void Transform::update() {
@@ -35,3 +45,11 @@ void Transform::update() {
     }
 }
 
+void Transform::submitUniforms() {
+    Shader& s = getComponent<Shader>();
+    s->use([&] () {
+        try {
+            glUniformMatrix4fv(s->getUniform("uModel"), 1, GL_FALSE, glm::value_ptr(model));
+        } catch (const std::out_of_range&) {}
+    });
+}

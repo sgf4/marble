@@ -35,3 +35,4 @@ limitations under the License. */
 #include <type_traits>
 #include <functional>
 #include <bitset>
+#include <optional>

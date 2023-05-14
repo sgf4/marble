@@ -33,17 +33,25 @@ add_library(marble STATIC ${MARBLE_SOURCES})
 find_package(OpenGL REQUIRED)
 target_link_libraries(marble PUBLIC OpenGL::GL)
 
-find_package(glfw3 REQUIRED)
-include_directories(${GLFW_INCLUDE_DIRS})
-target_link_libraries(marble PUBLIC glfw)
+if (NOT TARGET glfw3)
+  find_package(glfw3 REQUIRED)
+  include_directories(${GLFW_INCLUDE_DIRS})
+endif()
 
-find_package(glm REQUIRED)
-include_directories(${GLM_INCLUDE_DIRS})
-target_link_libraries(marble PUBLIC ${GLM_LIBRARIES})
+target_link_libraries(marble PRIVATE glfw)
 
-find_package(assimp REQUIRED)
-include_directories(${ASSIMP_INCLUDE_DIRS})
-target_link_libraries(marble PUBLIC ${ASSIMP_LIBRARIES})
+if (NOT TARGET glm)
+  find_package(glm REQUIRED)
+  include_directories(${GLM_INCLUDE_DIRS})
+endif()
+target_link_libraries(marble PRIVATE ${GLM_LIBRARIES})
+
+
+if (NOT TARGET assimp)
+  find_package(assimp REQUIRED)
+  include_directories(${ASSIMP_INCLUDE_DIRS})
+endif()
+target_link_libraries(marble PRIVATE assimp)
 
 target_include_directories(marble PUBLIC ${PROJECT_SOURCE_DIR})
 

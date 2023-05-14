@@ -20,38 +20,11 @@ limitations under the License. */
 
 using namespace ME::GL;
 
-static const char* modelShaderVert = R"(
-#version 330 core
-layout (location = 0) in vec2 apos;
-
-uniform mat4 umodel;
-uniform mat4 uview;
-uniform mat4 uproj;
-
-out vec3 color;
-
-void main() {
-    gl_Position = uproj * uview * umodel * vec4(apos, 0.0, 1.0);
-}
-)";
-
-static const char* modelShaderFrag = R"(
-#version 330 core
-
-out vec4 out_color;
-
-void main() {
-    out_color = vec4(1.0, 0.0, 0.0, 1.0);
-}
-)";
-
-Shader Model::shader;
-
-Model::Model(const char* fdata, u32 size) {
+Model::Model(const unsigned char* fdata, u64 size) {
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFileFromMemory(fdata, size, aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = importer.ReadFileFromMemory(fdata, size, aiProcessPreset_TargetRealtime_Quality | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_FlipUVs);
 
-    if (!scene || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
+    if (!scene || !scene->mRootNode || !scene->mRootNode || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) {
         std::cerr << "Assimp importer.ReadFile (Error) -- " << importer.GetErrorString() << "\n";
         return;
     }
@@ -62,33 +35,54 @@ Model::Model(const char* fdata, u32 size) {
         const aiMesh* paiMesh = scene->mMeshes[i];
         Mesh& m = meshes[i];
 
-        std::vector<glm::vec3> vertices;
-        vertices.resize(paiMesh->mNumFaces*3);
+        std::vector<u32> indices;
+        indices.reserve(paiMesh->mNumFaces*3);
 
-        for (u32 j=0; paiMesh->mNumFaces; j++) {
+        for (u32 j=0; j<paiMesh->mNumFaces; j++) {
             const auto& face = paiMesh->mFaces[j];
             assert(face.mNumIndices == 3);
             for (int k=0; k<face.mNumIndices; k++) {
-                aiVector3D pos = paiMesh->mVertices[face.mIndices[k]];
-                vertices[j*3+k] = {pos.x, pos.y, pos.z};
+                indices.push_back(face.mIndices[k]);
             }
         }
+        m.numIndices = indices.size();
 
-        glBindBuffer(GL_ARRAY_BUFFER, m.vbo);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(glm::vec3), vertices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.vboIndices);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(u32), indices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
         glBindVertexArray(m.vao);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*) 0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        if (paiMesh->HasPositions()) {
+            glBindBuffer(GL_ARRAY_BUFFER, m.vboVertices);
+            glBufferData(GL_ARRAY_BUFFER, paiMesh->mNumVertices*sizeof(aiVector3D), paiMesh->mVertices, GL_STATIC_DRAW);
+
+            glEnableVertexAttribArray(APOS);
+            glVertexAttribPointer(APOS, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D), (void*) 0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        if (paiMesh->HasNormals()) {
+            glBindBuffer(GL_ARRAY_BUFFER, m.vboNormals);
+            glBufferData(GL_ARRAY_BUFFER, paiMesh->mNumVertices*sizeof(aiVector3D), paiMesh->mNormals, GL_STATIC_DRAW);
+
+            glEnableVertexAttribArray(ANORMALS);
+            glVertexAttribPointer(ANORMALS, 3, GL_FLOAT, GL_FALSE, sizeof(aiVector3D), (void*) 0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+        }
+
+        glBindVertexArray(0);
     }
 }
 
 void Model::draw() {
-
+    for (Mesh& m : meshes) {
+        glBindVertexArray(m.vao);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.vboIndices);
+        glDrawElements(GL_TRIANGLES, m.numIndices, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
 }
 
-
-void Model::compileShader() {
-    shader.compile(modelShaderVert, modelShaderFrag);
-}

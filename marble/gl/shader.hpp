@@ -13,11 +13,13 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
-#include <marble/integers.hpp>
+#include "gl.hpp"
+#include "../integers.hpp"
 
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <functional>
 
 namespace ME {
 
@@ -42,6 +44,23 @@ public:
     }
     u32 getUniform(const char* name) {
         return uniforms.at(name);
+    }
+
+    void use() {
+        glUseProgram(program);
+    }
+
+    void unuse() {
+        glUseProgram(0);
+    }
+
+    void use(std::function<void(void)> fn) {
+        GLint id;
+        glGetIntegerv(GL_CURRENT_PROGRAM, &id);
+
+        glUseProgram(program);
+        fn();
+        glUseProgram(id);
     }
 
     Shader(Shader&& other) {

@@ -12,9 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/engine.hpp>
-#include <marble/window.hpp>
-#include <marble/world.hpp>
+#include "engine.hpp"
+#include "window.hpp"
+#include "world.hpp"
 
 #include <memory>
 #include <unordered_set>
@@ -33,13 +33,17 @@ public:
 
     void update() {
         while (!window.shouldClose()) {
-            window.update();
-            time.update();
+            try {
+                window.update();
+                time.update();
 
-            // Update worlds
-            for (World* world : worlds) {
-                world->updateWorld();
-                world->update();
+                // Update worlds
+                for (World* world : worlds) {
+                    world->updateWorld();
+                    world->update();
+                }
+            } catch(std::string str) {
+                std::cerr << "ERROR: " << str << std::endl;
             }
         }
     }

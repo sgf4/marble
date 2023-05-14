@@ -12,24 +12,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/components/camera.hpp>
-#include <marble/components/transform.hpp>
-#include <marble/entity.hpp>
-#include <marble/window.hpp>
+#include "camera.hpp"
+#include "transform.hpp"
+#include "../entity.hpp"
+#include "../window.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <stdexcept>
 
 using namespace ME;
 
 void Camera::init() {
     getEntity().addComponent<Transform>();
-    TRANSFORM.setPosition({0.0, 0.0, -1.0});
-
 }
 
 void Camera::update() {
-    auto& t = TRANSFORM;
+    if (control) updateControl();
+
+    auto& t = getComponent<Transform>();
     pitch = glm::clamp(pitch, -89.f, 89.f);
     direction.x = std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
     direction.y = std::sin(glm::radians(pitch));
@@ -41,12 +42,23 @@ void Camera::update() {
     proj = glm::perspective(glm::radians(fov), (float)WINDOW.getResolutionRatio(), 0.01f, 10000.0f);
     yaw = std::fmod(yaw, 360.f);
 
-    if (!control) return;
+    // Update uniforms
+    for (GL::Shader* s : GL::Shader::shaders) {
+        glUseProgram(*s);
+        try { glUniformMatrix4fv(s->getUniform("uView"), 1, GL_FALSE, glm::value_ptr(t.model)); } catch(...) {}
+        try { glUniformMatrix4fv(s->getUniform("uProj"), 1, GL_FALSE, glm::value_ptr(proj)); } catch(...) {}
+        try { glUniform3fv(s->getUniform("uViewPos"), 1, glm::value_ptr(t.position)); } catch(...) {}
+    }
+    glUseProgram(0);
+}
 
-    auto dir = WINDOW.getMouseDir();
+void Camera::updateControl() {
+    auto dir = WINDOW.getMouseDir() * glm::vec2(sensibility);
+
     yaw += dir.x;
     pitch += dir.y;
 
+    auto& t = getComponent<Transform>();
     glm::vec3 mov = {
         std::cos(glm::radians(yaw))*WTIME.delta*2.0,
         0.0,
@@ -58,14 +70,5 @@ void Camera::update() {
     if (WINDOW.getKey(KEY_D)) t.position += glm::cross(mov, up);
     if (WINDOW.getKey(KEY_A)) t.position -= glm::cross(mov, up);
 
-    // Update uniforms
-    for (GL::Shader* s : GL::Shader::shaders) {
-        try {
-            glUseProgram(*s);
-            glUniformMatrix4fv(s->getUniform("uview"), 1, GL_FALSE, glm::value_ptr(t.model));
-            glUniformMatrix4fv(s->getUniform("uproj"), 1, GL_FALSE, glm::value_ptr(proj));
-        } catch (const std::out_of_range& e) {}
-    }
-    glUseProgram(0);
 
 }

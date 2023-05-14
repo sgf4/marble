@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/window.hpp>
+#include "window.hpp"
 #include <GLFW/glfw3.h>
 #include <algorithm>
 
@@ -53,7 +53,7 @@ GLFWInstance::GLFWInstance(Window& w) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfw = glfwCreateWindow(w.getResolution().x, w.getResolution().y, w.getTitle(), NULL, NULL);
+    glfw = glfwCreateWindow(w.getSize().x, w.getSize().y, w.getTitle(), NULL, NULL);
     assert(glfw);
 
     glfwMakeContextCurrent(glfw);
@@ -66,7 +66,7 @@ GLFWInstance::~GLFWInstance() {
 }
 
 Window::Window() :
-   resolution {640, 480},
+   resolution {640/8, 480/8},
    offset(),
    size(640, 480),
    title("omg"),
@@ -97,9 +97,9 @@ Window::Window() :
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     assert(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
 
-    glBindRenderbuffer(GL_RENDERBUFFER, depthRBO);
+    glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, resolution.x, resolution.y);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRBO);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

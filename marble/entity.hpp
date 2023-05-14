@@ -27,54 +27,68 @@ class Entity {
     using ComponentKeys = std::array<Component::Key, 8>;
     ComponentKeys componentKeys;
     //std::unique_ptr<std::unordered_map<std::type_index, u32>> extendedComponentKeys;
-    std::weak_ptr<u32> ref;
+    std::weak_ptr<Entity*> ref;
     u32 nComponents {};
 public:
 
     Entity() {}
+    Entity(Entity&) = delete;
+    Entity(Entity&& other);
+
+    Entity& operator=(Entity&&);
 
     u32 id;
-
-    template<typename T>
-    T& addComponent() {
-        return static_cast<T&>(addComponent(CM.getTypeId<T>()));
-    }
 
     Component& addComponent(u32 type);
 
     template<typename T>
-    void delComponent() {
-        delComponent(CM.getTypeId<T>());
+    T& addComponent() {
+        CM.load<T>();
+        return static_cast<T&>(addComponent(CM.getTypeId<T>()));
     }
 
     void delComponent(u32 type);
     void delComponent(Component::Key& type);
 
     template<typename T>
+    void delComponent() {
+        delComponent(CM.getTypeId<T>());
+    }
+
+    bool hasComponent(u32 type);
+
+    template<typename T>
     bool hasComponent() {
         return hasComponent(CM.getTypeId<T>());
     }
 
-    bool hasComponent(u32 type);
+    Component& getComponent(u32 type);
 
     template<typename T>
     T& getComponent() {
         return static_cast<T&>(getComponent(CM.getTypeId<T>()));
     }
 
-    Component& getComponent(u32 type);
+    template<typename T>
+    T* getOptionalComponent() {
+        try {
+            return getComponent<T>();
+        } catch (...) {
+            return 0;
+        }
+    }
 
     template<typename... Ts>
     auto getComponents() {
         return std::tie(getComponent<Ts>()...);
     }
 
+    Component::Key& getComponentKey(u32 type);
+
     template<typename T>
     Component::Key& getComponentKey() {
         return getComponentKey(CM.getTypeId<T>());
     }
-
-    Component::Key& getComponentKey(u32 type);
 
     ComponentKeys::iterator getComponentKeyIt(u32 type);
 
@@ -84,9 +98,7 @@ public:
 
     void destroy();
 
-    void updateId(u32 i);
-
-    std::shared_ptr<u32> getRef();
+    std::shared_ptr<Entity*> getRef();
 };
 
 // Shortcuts for Component
@@ -96,8 +108,18 @@ T& Component::addComponent() {
 }
 
 template<typename T>
+bool Component::hasComponent() {
+    return getEntity().hasComponent<T>();
+}
+
+template<typename T>
 T& Component::getComponent() {
     return getEntity().getComponent<T>();
+}
+
+template<typename T>
+auto Component::getOptionalComponent() {
+    return getEntity().getOptionalComponent<T>();
 }
 
 template<typename T>

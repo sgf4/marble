@@ -12,17 +12,30 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/entity.hpp>
+#include "entity.hpp"
 #include <algorithm>
 
 using namespace ME;
 
-void Entity::updateId(u32 i) {
-    id = i;
-    if (auto r = ref.lock()) *r = i;
+Entity::Entity(Entity&& other) {
+    id = other.id;
+    *this = std::move(other);
+}
+
+Entity& Entity::operator=(Entity&& other) {
+    componentKeys = std::move(other.componentKeys);
+    ref = std::move(other.ref);
+    nComponents = other.nComponents;
+
+    if (!ref.expired()) {
+        *(ref.lock()) = this;
+    }
+
     std::for_each_n(componentKeys.begin(), nComponents, [&] (Component::Key& k) {
         CM.get(k).eId = id;
     });
+
+    return *this;
 }
 
 Component& Entity::addComponent(u32 type) {
@@ -80,11 +93,11 @@ void Entity::destroy() {
     }
 }
 
-std::shared_ptr<u32> Entity::getRef() {
+std::shared_ptr<Entity*> Entity::getRef() {
     if (ref.expired()) {
-        auto ref = std::make_shared<u32>(id);
-        ref = ref;
-        return ref;
+        auto r = std::make_shared<Entity*>(this);
+        ref = r;
+        return r;
     }
     return ref.lock();
 }

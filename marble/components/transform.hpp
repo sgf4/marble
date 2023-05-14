@@ -28,11 +28,22 @@ public:
     glm::vec3 rotation {};
     bool modelNeedsUpdate { true };
 
+    Transform& operator=(const Transform& other);
+
     void update();
     Transform& setPosition(glm::vec3 p) { position = p; modelNeedsUpdate = true; return *this; }
+    Transform& setPosition(float x, float y, float z) { position = {x, y, z}; modelNeedsUpdate = true; return *this; }
+
     Transform& setScale(glm::vec3 s) { scale = s; modelNeedsUpdate = true; return *this; }
+    Transform& setScale(float x, float y, float z) { scale = {x, y, z}; modelNeedsUpdate = true; return *this; }
+
     Transform& setRotation(glm::vec3 r) { rotation = r; modelNeedsUpdate = true; return *this; }
+    Transform& setRotation(float x, float y, float z) { rotation = {x, y, z}; modelNeedsUpdate = true; return *this; }
+
     Transform& addRotation(glm::vec3 r) { rotation += r; modelNeedsUpdate = true; return *this; }
+    Transform& addRotation(float x, float y, float z) { rotation += glm::vec3{x, y, z}; modelNeedsUpdate = true; return *this; }
+
+    void submitUniforms();
 };
 
 }

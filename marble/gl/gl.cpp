@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #define GLAD_GL_IMPLEMENTATION
-#include <marble/gl/gl.hpp>
+#include "gl.hpp"
 #include <pthread.h>
 
 using namespace ME::GL;

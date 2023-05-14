@@ -18,7 +18,8 @@ limitations under the License. */
 
 #include <unordered_map>
 #include <vector>
-#include <bitset>
+
+#define LOADER(CLASS, ...) template<> struct ME::ComponentSystem< CLASS > : ME::BasicComponentSystem< CLASS > { __VA_ARGS__ };
 
 namespace ME {
 
@@ -44,7 +45,13 @@ struct Component {
     T& addComponent();
 
     template<typename T>
+    bool hasComponent();
+
+    template<typename T>
     T& getComponent();
+
+    template<typename T>
+    auto getOptionalComponent();
 
     template<typename T>
     void delComponent();
@@ -106,8 +113,6 @@ template<typename C>
 class ComponentSystem : public BasicComponentSystem<C> {
 };
 
-class ComponentSystemManager;
-
 class ComponentManager {
     std::unordered_map<u32, std::unique_ptr<BasicComponentSystemBase>> systems;
 public:
@@ -124,8 +129,13 @@ public:
     ComponentManager();
 
     template<typename T>
+    bool isLoaded() {
+        return systems.find(getTypeId<T>()) != systems.end();
+    }
+
+    template<typename T>
     void load() {
-        systems.insert({getTypeId<T>(), std::make_unique<ComponentSystem<T>>()});
+        if (!isLoaded<T>()) systems.insert({getTypeId<T>(), std::make_unique<ComponentSystem<T>>()});
     }
 
     template<typename T>

@@ -12,14 +12,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. */
 
-#include <marble/world.hpp>
-#include <marble/entity.hpp>
-#include <marble/component.hpp>
-#include <marble/components/camera.hpp>
-#include <marble/components/shader.hpp>
-#include <marble/components/transform2d.hpp>
-#include <marble/components/model.hpp>
-#include <marble/window.hpp>
+#include "world.hpp"
+#include "entity.hpp"
+#include "component.hpp"
+#include "components/camera.hpp"
+#include "components/shader.hpp"
+#include "components/transform2d.hpp"
+#include "components/model.hpp"
+#include "components/light.hpp"
+#include "window.hpp"
 
 using namespace ME;
 
@@ -36,10 +37,13 @@ World::World() {
     CM.load<Transform2D>();
     CM.load<Camera>();
     CM.load<Model>();
+    CM.load<Light>();
     //CM.load<Gui>();
 
     camera = addEntity().getRef();
     getCamera().addComponent<Camera>().setControl(true);
+
+    addEntity().addComponent<Light>();
 }
 
 u32 World::getEntityCount() {
@@ -67,8 +71,6 @@ void World::delEntity(u32 id) {
     e.destroy();
     e = std::move(*--entities.end());
     entities.pop_back();
-
-    if (id != entities.size()) e.updateId(id);
 }
 
 

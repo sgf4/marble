@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
-#include <marble/gl/gl.hpp>
+#include "gl.hpp"
 #include <vector>
 
 namespace ME {
@@ -23,20 +23,23 @@ namespace GL {
 class Model {
     struct Mesh {
 		GL::VAO vao;
-        GL::VBO vbo;
+        GL::VBO vboVertices, vboNormals, vboIndices;
+        u32 numIndices {};
 		//std::vector<u32> vert_indices;
 		u32 tex_handle;
 	};
+
+    enum {
+        APOS,
+        ANORMALS
+    };
 
 public:
 	std::vector<Mesh> meshes;
 	std::vector<Texture> textures;
 
-    Model(const char* fdata, u32 size);
+    Model(const unsigned char* fdata, u64 size);
     void draw();
-
-    static void compileShader();
-    static GL::Shader shader;
 };
 
 };

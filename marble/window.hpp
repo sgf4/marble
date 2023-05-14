@@ -53,7 +53,7 @@ class Window {
     GL::Instance glInstance;
     GL::Shader fboShader;
     GL::FBO fbo;
-    GL::RBO depthRBO;
+    GL::RBO rboDepth;
     GL::Texture texture;
 
     enum KeyState : u8 {

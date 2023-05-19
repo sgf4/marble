@@ -25,11 +25,13 @@ namespace ME {
 class Camera : public Component {
     void updateControl();
 public:
-    bool control { false };
+    bool control;
     glm::vec3 direction;
-    glm::vec3 up {0, 1, 0};
+    glm::vec3 up;
     glm::mat4 proj;
-    float fov {75.f}, yaw {0.f}, pitch {0.f}, sensibility {0.1f};
+    float fov, yaw, pitch, sensibility;
+
+    Camera();
 
     void init();
     void update();

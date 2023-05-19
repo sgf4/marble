@@ -66,7 +66,7 @@ GLFWInstance::~GLFWInstance() {
 }
 
 Window::Window() :
-   resolution {640/8, 480/8},
+   resolution {640, 480},
    offset(),
    size(640, 480),
    title("omg"),

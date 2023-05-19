@@ -28,30 +28,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED true)
 
 file(GLOB_RECURSE MARBLE_SOURCES marble/*.cpp marble/*.hpp)
 
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+add_subdirectory(libs/glfw)
+
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_FBX_IMPORTER ON CACHE BOOL "" FORCE)
+add_subdirectory(libs/assimp)
+
+target_compile_options(assimp PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-dangling-reference>)
+
 add_library(marble STATIC ${MARBLE_SOURCES})
 
 find_package(OpenGL REQUIRED)
-target_link_libraries(marble PUBLIC OpenGL::GL)
+target_link_libraries(marble PRIVATE OpenGL::GL)
 
-if (NOT TARGET glfw3)
-  find_package(glfw3 REQUIRED)
-  include_directories(${GLFW_INCLUDE_DIRS})
-endif()
-
-target_link_libraries(marble PRIVATE glfw)
-
-if (NOT TARGET glm)
-  find_package(glm REQUIRED)
-  include_directories(${GLM_INCLUDE_DIRS})
-endif()
-target_link_libraries(marble PRIVATE ${GLM_LIBRARIES})
-
-
-if (NOT TARGET assimp)
-  find_package(assimp REQUIRED)
-  include_directories(${ASSIMP_INCLUDE_DIRS})
-endif()
-target_link_libraries(marble PRIVATE assimp)
+target_link_libraries(marble PRIVATE assimp glfw)
 
 target_include_directories(marble PUBLIC ${PROJECT_SOURCE_DIR})
 

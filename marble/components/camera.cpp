@@ -23,6 +23,15 @@ limitations under the License. */
 
 using namespace ME;
 
+Camera::Camera()
+:
+control(false),
+direction(0, 1, 0),
+up(0, 1, 0),
+fov(75.f), yaw(0.f), pitch(0.f), sensibility(0.5f) {
+
+}
+
 void Camera::init() {
     getEntity().addComponent<Transform>();
 }

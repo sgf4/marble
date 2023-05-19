@@ -51,7 +51,8 @@ add_library(marble STATIC ${MARBLE_SOURCES})
 find_package(OpenGL REQUIRED)
 target_link_libraries(marble PRIVATE OpenGL::GL)
 
-target_link_libraries(marble PRIVATE assimp glfw glm)
+target_link_libraries(marble PRIVATE assimp glfw)
+target_link_libraries(marble PUBLIC glm)
 
 target_include_directories(marble PUBLIC ${PROJECT_SOURCE_DIR})
 

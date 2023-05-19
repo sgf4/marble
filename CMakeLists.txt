@@ -44,6 +44,8 @@ add_subdirectory(libs/assimp)
 
 target_compile_options(assimp PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-dangling-reference>)
 
+add_subdirectory(libs/glm)
+
 add_library(marble STATIC ${MARBLE_SOURCES})
 
 find_package(OpenGL REQUIRED)
